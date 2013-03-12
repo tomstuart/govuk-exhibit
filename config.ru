@@ -4,6 +4,7 @@ require 'rack/proxy'
 require 'uri'
 
 GOV_UK_URL = URI.parse('https://www.gov.uk')
+FAYE_JAVASCRIPT_PATH = '/faye/faye-browser-min.js'
 MIRROR_JAVASCRIPT_PATH = '/mirror.js'
 
 class Proxy < Rack::Proxy
@@ -50,7 +51,8 @@ class InsertTags < Struct.new(:app)
   end
 
   def script_tags
-    %Q{<script src="#{MIRROR_JAVASCRIPT_PATH}"></script>}
+    [FAYE_JAVASCRIPT_PATH, MIRROR_JAVASCRIPT_PATH].
+      map { |src| %Q{<script src="#{src}"></script>} }.join
   end
 end
 
