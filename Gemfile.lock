@@ -1,9 +1,15 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    daemons (1.1.9)
+    eventmachine (1.0.3)
     rack (1.5.2)
     rack-proxy (0.3.7)
       rack
+    thin (1.5.0)
+      daemons (>= 1.0.9)
+      eventmachine (>= 0.12.6)
+      rack (>= 1.0.0)
 
 PLATFORMS
   ruby
@@ -11,3 +17,4 @@ PLATFORMS
 DEPENDENCIES
   rack
   rack-proxy
+  thin
