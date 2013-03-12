@@ -59,6 +59,17 @@
       faye.publish('/navigate', { url: url });
       return realPushState.call(window.history, state, title, url);
     };
+
+    faye.addExtension({
+      outgoing: function (message, callback) {
+        if (message.channel === '/meta/handshake') {
+          faye.publish('/scroll', { x: window.scrollX, y: window.scrollY });
+          faye.publish('/navigate', { url: window.location.href });
+        }
+
+        callback(message);
+      }
+    });
   };
 
   var beginMirroring = function (faye) {
