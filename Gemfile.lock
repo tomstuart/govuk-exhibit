@@ -9,4 +9,5 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  rack
   rack-proxy

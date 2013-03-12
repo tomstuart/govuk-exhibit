@@ -1,7 +1,9 @@
+require 'rack'
 require 'rack/proxy'
 require 'uri'
 
 GOV_UK_URL = URI.parse('https://www.gov.uk')
+MIRROR_JAVASCRIPT_PATH = '/mirror.js'
 
 class Proxy < Rack::Proxy
   def rewrite_env(env)
@@ -25,4 +27,5 @@ class Proxy < Rack::Proxy
   end
 end
 
+use Rack::Static, urls: [MIRROR_JAVASCRIPT_PATH]
 run Proxy.new
