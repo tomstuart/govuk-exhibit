@@ -1,3 +1,4 @@
+require 'faye'
 require 'rack'
 require 'rack/proxy'
 require 'uri'
@@ -52,6 +53,9 @@ class InsertTags < Struct.new(:app)
     %Q{<script src="#{MIRROR_JAVASCRIPT_PATH}"></script>}
   end
 end
+
+Faye::WebSocket.load_adapter('thin')
+use Faye::RackAdapter, mount: '/faye'
 
 use Rack::Static, urls: [MIRROR_JAVASCRIPT_PATH]
 use InsertTags
