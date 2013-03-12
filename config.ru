@@ -89,6 +89,21 @@ class StateCache < Struct.new(:x, :y, :url)
 
     callback.call(message)
   end
+
+  def outgoing(message, callback)
+    channel, successful, subscription = message.values_at('channel', 'successful', 'subscription')
+
+    if channel == '/meta/subscribe' && successful
+      case subscription
+      when '/scroll'
+        message['ext'] = { x: x, y: y }
+      when '/navigate'
+        message['ext'] = { url: url }
+      end
+    end
+
+    callback.call(message)
+  end
 end
 
 Faye::WebSocket.load_adapter('thin')
