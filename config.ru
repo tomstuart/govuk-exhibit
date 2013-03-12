@@ -75,8 +75,24 @@ class RewriteRedirects < Struct.new(:app)
   end
 end
 
+class StateCache < Struct.new(:x, :y, :url)
+  def incoming(message, callback)
+    channel, data = message.values_at('channel', 'data')
+
+    case channel
+    when '/scroll'
+      self.x = data['x']
+      self.y = data['y']
+    when '/navigate'
+      self.url = data['url']
+    end
+
+    callback.call(message)
+  end
+end
+
 Faye::WebSocket.load_adapter('thin')
-use Faye::RackAdapter, mount: '/faye'
+use Faye::RackAdapter, mount: '/faye', extensions: [StateCache.new(0, 0, '/')]
 
 use Rack::Static, urls: [MIRROR_JAVASCRIPT_PATH]
 use RewriteRedirects
