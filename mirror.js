@@ -80,6 +80,20 @@
     faye.subscribe('/navigate', function (message) {
       navigateTo(message.url);
     });
+
+    faye.addExtension({
+      incoming: function (message, callback) {
+        if (message.channel === '/meta/subscribe') {
+          if (message.subscription === '/scroll') {
+            window.scrollTo(message.ext.x, message.ext.y);
+          } else if (message.subscription === '/navigate') {
+            navigateTo(message.ext.url);
+          }
+        }
+
+        callback(message);
+      }
+    });
   };
 
   begin(beginControlling, beginMirroring);
