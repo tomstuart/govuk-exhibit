@@ -10,7 +10,8 @@ class Proxy < Rack::Proxy
         'rack.url_scheme' => GOV_UK_URL.scheme,
         'HTTP_HOST'       => GOV_UK_URL.host,
         'SERVER_PORT'     => GOV_UK_URL.port
-      )
+      ).
+      reject { |key, _| key == 'HTTP_ACCEPT_ENCODING' }
   end
 end
 
