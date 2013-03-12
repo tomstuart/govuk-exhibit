@@ -13,6 +13,16 @@ class Proxy < Rack::Proxy
       ).
       reject { |key, _| key == 'HTTP_ACCEPT_ENCODING' }
   end
+
+  def rewrite_response(response)
+    status, headers, body = response
+
+    [
+      status,
+      headers.reject { |key, _| key == 'status' },
+      body
+    ]
+  end
 end
 
 run Proxy.new
