@@ -36,8 +36,12 @@
       while (element) {
         if (element.localName === 'a') {
           event.preventDefault();
-          faye.publish('/navigate', { url: element.href });
-          navigateTo(element.href);
+
+          if (element.host === window.location.host || element.hostname === 'www.gov.uk') {
+            faye.publish('/navigate', { url: element.href });
+            navigateTo(element.href);
+          }
+
           break;
         }
 
