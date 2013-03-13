@@ -53,6 +53,12 @@
       faye.publish('/scroll', { x: window.scrollX, y: window.scrollY });
       faye.publish('/navigate', { url: window.location.href });
     });
+
+    var realPushState = window.history.pushState;
+    window.history.pushState = function (state, title, url) {
+      faye.publish('/navigate', { url: url });
+      return realPushState.call(window.history, state, title, url);
+    };
   };
 
   var beginMirroring = function (faye) {
