@@ -48,6 +48,11 @@
         element = element.parentNode;
       }
     });
+
+    window.addEventListener('pageshow', function () {
+      faye.publish('/scroll', { x: window.scrollX, y: window.scrollY });
+      faye.publish('/navigate', { url: window.location.href });
+    });
   };
 
   var beginMirroring = function (faye) {
