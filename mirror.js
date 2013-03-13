@@ -15,8 +15,13 @@
   };
 
   var navigateTo = function (url) {
-    if (window.location.href !== url) {
-      window.location.href = url;
+    var a = document.createElement('a');
+    a.href = url;
+    a.protocol = window.location.protocol;
+    a.host = window.location.host;
+
+    if (window.location.href !== a.href) {
+      window.location.href = a.href;
     }
   };
 
