@@ -47,7 +47,11 @@ class InsertTags < Struct.new(:app)
   end
 
   def add_tags(content)
-    content.sub(%r{(?=</head>)}, script_tags)
+    content.sub(%r{(?=</head>)}, meta_tags + script_tags)
+  end
+
+  def meta_tags
+    '<meta name="apple-mobile-web-app-capable" content="yes">'
   end
 
   def script_tags
