@@ -56,9 +56,29 @@ class InsertTags < Struct.new(:app)
   end
 end
 
+class RewriteRedirects < Struct.new(:app)
+  def call(env)
+    status, headers, body = app.call(env)
+
+    Rack::Response.new(body, status, headers) do |response|
+      if response.redirect?
+        url = URI.parse(response.location)
+        url = url.route_from(GOV_UK_URL) if url.absolute?
+
+        if url.relative?
+          response.redirect(url.to_s, response.status)
+        else
+          response.status = 204
+        end
+      end
+    end
+  end
+end
+
 Faye::WebSocket.load_adapter('thin')
 use Faye::RackAdapter, mount: '/faye'
 
 use Rack::Static, urls: [MIRROR_JAVASCRIPT_PATH]
+use RewriteRedirects
 use InsertTags
 run Proxy.new
