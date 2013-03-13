@@ -19,7 +19,7 @@ class Proxy < Rack::Proxy
 
     [
       status,
-      headers.reject { |key, _| key == 'status' },
+      headers.reject { |key, _| %w(status transfer-encoding).include?(key) },
       body
     ]
   end
